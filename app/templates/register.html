@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<div class="container-fluid" ng-controller="userCtrl">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 left-side">
+            <header>
+                <span>Need an account?</span>
+                <h3>Create Account<br>Save Products</h3>
+            </header>
+        </div>
+
+        <div class="col-md-6 col-sm-12 right-side center-div">
+            <!--display message to user-->
+            <div>
+                <p class="alert alert-danger" ng-show="errormsg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i><strong> Error!</strong> {{errormsg}} </p>
+            </div>
+
+            <!--Register Form Start-->
+            <form name="form" ng-submit="createUser()" role="form">
+                <div class="md-form" ng-class="{'has-error': form.name.$dirty && form.name.$error.required && form.name.$error.invalid}">
+                    <input type="text" name="name" id="name" class="form-control validate" for="name" ng-model="name" required ng-minlength="3" ng-maxlength="25">
+                    <label for="name">Your Name <span class="text-muted">(3 - 25 Characters)</span></label>
+                    <div class="error" ng-messages="form.name.$error" ng-if="form.name.$dirty">
+                        <div ng-messages-include="templates/messages.html"></div>
+                    </div>
+                </div>
+
+                <div class="md-form margin-top" ng-class="{'has-error': form.email.$dirty && form.email.$error.required && form.email.$error.invalid}">
+                    <input type="email" id="email" class="form-control validate" name="email" ng-model="email" for="email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
+                    <label for="email">Your Email</label>
+                    <div class="error" ng-messages="form.email.$error" ng-if="form.email.$dirty">
+                        <div ng-messages-include="templates/messages.html"></div>
+                    </div>
+                </div>
+
+                <div class="md-form margin-top" ng-class="{'has-error': form.password.$dirty && form.password.$error.required && form.password.$error.invalid}">
+                    <input type="{{check ? 'text' : 'password'}}" id="password" class="form-control validate" name="password" ng-model="password" for="password" ng-minlength="6" required>
+                    <label for="password">Your password <span class="text-muted">(Atleast 6 Characters)</span></label>
+                    <input type="checkbox" ng-model="check"><span class="showpassword">Show Password</span>
+                    <div class="error" ng-messages="form.password.$error" ng-if="form.password.$dirty">
+                        <div ng-messages-include="templates/messages.html"></div>
+                    </div>
+                </div>
+
+                <div class="signup row text-center">
+                    <div class="col-md-12 col-sm-12">
+                        <button type="submit" class="btn bg-green pull-right" ng-disabled="form.$invalid">Sign-Up Now</button>
+                    </div>
+                    <div class="col-md-12 col-sm-12 ">
+                        <span><a ng-href="#!/login" class="pull-right ">Already a member? Sign In.</a></span>
+                    </div>
+                </div>
+            </form>
+            <!--Registration Form End-->
+
+            <!-- Social Links-->
+            <div class="row">
+                <ul class="social list-inline ">
+                    <li><a href="https://facebook.com/" target="_blank ">Facebook</a></li>
+                    <li><a href="https://twitter.com/ " target="_blank ">Twitter</a></li>
+                    <li><a href="https://pk.linkedin.com/ " target="_blank ">Linkedin</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Register View -->

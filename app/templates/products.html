@@ -1,0 +1,131 @@
+<!Doctype html>
+<!--Navbar Fixed-->
+<nav class="navbar navbar-dark fixed-top bg-green">
+    <div class="container">
+        <div class="navbar-brand">
+            <strong>List of Products</strong>
+        </div>
+
+        <!--Logout Button-->
+        <ul class="nav navbar-nav float-sm-right">
+            <li><a ng-click="logout()" class="btn btn-default btn-sm"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+        </ul>
+        <!--/Logout Button-->
+    </div>
+</nav>
+
+<!-- Container for Products List Table and Create/Update Modal-->
+<div class="container product-pg" ng-controller="productsCtrl">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <!-- For Searching Current Product List -->
+            <input type="text" ng-model="search" class="form-control" placeholder="Search product...">
+
+
+            <!--Display success and error messages to user-->
+            <div>
+                <p class="alert alert-success" ng-show="successmsg"><i class="fa fa-check" aria-hidden="true"></i><strong> Success! </strong> {{successmsg}} </p>
+                <p class="alert alert-danger" ng-show="errormsg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i><strong> Error!</strong> {{errormsg}} </p>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <!--Table head-->
+                    <thead>
+                        <tr>
+                            <th class="width-30-pct">Name</th>
+                            <th class="width-30-pct">Description</th>
+                            <th class="text-align-center">Price</th>
+                            <th class="text-align-center">Action</th>
+                        </tr>
+                    </thead>
+                    <!--/Table head-->
+
+                    <!--Table body - List all Products-->
+                    <tbody ng-init="getAll()">
+                        <!--search product in every different page-->
+                        <tr dir-paginate="product in products | filter:search | orderBy:sortKey:reverse | itemsPerPage:5" pagination-id="prod">
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.description }}</td>
+                            <td class="text-align-center">Rs. {{ product.price }}</td>
+                            <td class="text-align-center">
+                                <a ng-click="readOne(product.id)" class="btn btn-default" title="Edit item"><i class="fa fa-pencil fa-lg"></i></a>
+                                <a ng-click="deleteProduct(product.id)" class="btn btn-blue-grey" title="Delete item"><i class="fa fa-trash fa-lg"></i></a>
+                            </td>
+                        </tr>
+                        <!--/product List-->
+                    </tbody>
+                </table>
+
+                <div class="col-md-12 col-sm-12 flex-center">
+                    <!-- Angular Pagination -->
+                    <dir-pagination-controls pagination-id="prod" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/shared/dir_pagination.tpl.html"></dir-pagination-controls>
+                </div>
+            </div>
+            <!--/Table End-->
+
+            <!--  Floating Button on Page Bottom - Create Product -->
+            <button type="button" class=" btn-circle btn-lg fixed-btn hoverable" data-toggle="modal" href="#modal-product-form" ng-click="showCreateForm()">
+                <a ><i class="fa fa-plus"></i></a>
+            </button>
+            <!-- /Floating Button on Page Bottom - Create Product -->
+
+            <!-- Modal - Create / Edit Product -->
+            <div class="modal fade" id="modal-product-form" tabindex="-1" role="dialog" aria-labelledby="modal-product-title" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <!--Content-->
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header bg-green">
+                            <h4 class="modal-title w-100" id="modal-product-title">Add Product</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <!--/Header-->
+
+                        <!--Body - Form Input Fields-->
+                        <div class="modal-body">
+                            <form name="form" role="form">
+                                <div class="md-form margin-top" ng-class="{'has-error': form.name.$dirty && form.name.$error.required && form.name.$error.invalid}">
+                                    <input type="text" name="name" id="name" class="form-control validate" for="name" ng-model="name" required>
+                                    <label for="name">Name</label>
+                                    <div class="error" ng-messages="form.name.$error" ng-if="form.name.$dirty">
+                                        <div ng-messages-include="templates/messages.html"></div>
+                                    </div>
+                                </div>
+
+                                <div class="md-form">
+                                    <textarea ng-model="description" id="description" type="text" class="md-textarea validate"></textarea>
+                                    <label for="description">Description</label>
+                                </div>
+
+                                <div class="md-form margin-top" ng-class="{'has-error': form.price.$dirty && form.price.$error.required && form.price.$error.invalid}">
+                                    <input type="text" name="price" id="price" class="form-control validate" for="price" ng-model="price" required>
+                                    <label for="price">Price</label>
+                                    <div class="error" ng-messages="form.price.$error" ng-if="form.price.$dirty">
+                                        <div ng-messages-include="templates/messages.html"></div>
+                                    </div>
+                                </div>
+                                <!--/Body - Form Input Fields-->
+                            </form>
+                        </div>
+                        <!--Footer - Create / Update Action Buttons-->
+                        <div class="modal-footer margin-bottom">
+                            <a id="btn-create-product" class="btn bg-red" ng-click="createProduct()"><i class="fa fa-plus left fa-lg" aria-hidden="true"></i> Create</a>
+                            <a id="btn-update-product" class="btn btn-elegant" ng-click="updateProduct()"><i class="fa fa-pencil left fa-lg" aria-hidden="true"></i> Save Changes</a>
+                            <button type="button" class="btn bg-green" data-dismiss="modal"> <i class="fa fa-close left fa-lg" aria-hidden="true"></i>Close</button>
+                        </div>
+                        <!--/Footer-->
+                    </div>
+                    <!--/Content -->
+                </div>
+            </div>
+            <!-- Modal Create / Edit Product -->
+
+
+        </div>
+        <!-- end col s12 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end container -->
